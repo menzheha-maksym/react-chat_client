@@ -19,12 +19,12 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Container className="w-100">
+      <Container className="w-100 d-flex justify-content-between">
         hello
         <Button
           disabled={fetching}
           variant="primary"
-          className="w-100"
+          className=""
           onClick={async () => {
             await logout();
             navigate("/login", { replace: true });
