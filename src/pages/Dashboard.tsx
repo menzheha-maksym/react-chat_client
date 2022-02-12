@@ -1,23 +1,29 @@
 import React from "react";
 import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "urql";
+import { useMutation, useQuery } from "urql";
 import { LogoutMutation } from "../graphql/mutations/Logout.mutation";
+import { MeQuery } from "../graphql/queries/Me.query";
 import { useIsAuth } from "../utils/useIsAuth";
 
 const Dashboard: React.FC = () => {
+  // 2 me queries in a row... will fix it later... or not,
+  // it looks like its cached
   useIsAuth();
+  const [{ data, fetching: meFetching }] = useQuery({
+    query: MeQuery,
+  });
 
-  const [{ fetching }, logout] = useMutation(LogoutMutation);
+  const [{ fetching: logoutFetching }, logout] = useMutation(LogoutMutation);
 
   const navigate = useNavigate();
 
   return (
     <>
       <Container className="w-100 d-flex justify-content-between">
-        hello
+        hello {!meFetching ? data.me.username : null}
         <Button
-          disabled={fetching}
+          disabled={logoutFetching}
           variant="primary"
           className=""
           onClick={async () => {
