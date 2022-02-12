@@ -1,14 +1,9 @@
 import React from "react";
 import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { gql, useMutation } from "urql";
+import { useMutation } from "urql";
+import { LogoutMutation } from "../graphql/mutations/Logout.mutation";
 import { useIsAuth } from "../utils/useIsAuth";
-
-const LogoutMutation = gql`
-  mutation Logout {
-    logout
-  }
-`;
 
 const Dashboard: React.FC = () => {
   useIsAuth();

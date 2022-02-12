@@ -1,22 +1,8 @@
 import React, { FormEvent, useState } from "react";
 import { Button, Form, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { gql, useMutation } from "urql";
-
-const LoginMutaion = gql`
-  mutation Login($input: UserInput!) {
-    login(input: $input) {
-      user {
-        id
-        username
-      }
-      errors {
-        field
-        message
-      }
-    }
-  }
-`;
+import { useMutation } from "urql";
+import { LoginMutaion } from "../graphql/mutations/Login.mutation";
 
 const Login: React.FC = () => {
   const usernameRef = React.createRef<HTMLInputElement>();

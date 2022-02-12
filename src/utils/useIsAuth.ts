@@ -1,15 +1,7 @@
-import { gql, useQuery } from "urql";
+import { useQuery } from "urql";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-
-const MeQuery = gql`
-  query Me {
-    me {
-      id
-      username
-    }
-  }
-`;
+import { MeQuery } from "../graphql/queries/Me.query";
 
 export const useIsAuth = () => {
   const [{ data, fetching }] = useQuery({
