@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import { Button, Form, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { gql, useMutation } from "urql";
 
 const LoginMutaion = gql`
@@ -21,27 +22,26 @@ const Login: React.FC = () => {
   const usernameRef = React.createRef<HTMLInputElement>();
   const passwordRef = React.createRef<HTMLInputElement>();
 
-  const [, executeMutation] = useMutation(LoginMutaion);
+  const [{ fetching }, login] = useMutation(LoginMutaion);
 
   const [errors, setErrors] = useState<{ field: string; message: string }>();
 
-  const onLoginSubmit = (e: FormEvent) => {
+  const navigate = useNavigate();
+
+  const onLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const input = {
       username: usernameRef.current?.value,
       password: passwordRef.current?.value,
     };
-    executeMutation({ input }).then((res) => {
-      if (res.data.login.errors[0]) {
-        setErrors(res.data.login.errors[0]);
-      } else {
-        //push user to ...
-      }
-    });
+    const response = await login({ input });
 
-    console.log("username: ", usernameRef.current?.value);
-    console.log("password: ", passwordRef.current?.value);
+    if (response.data.login.errors) {
+      setErrors(response.data.login.errors[0]);
+    } else if (response.data.login.user) {
+      navigate("/d", { replace: true });
+    }
   };
 
   return (
@@ -70,7 +70,12 @@ const Login: React.FC = () => {
               <Form.Text className="text-danger">{errors.message}</Form.Text>
             ) : null}
           </Form.Group>
-          <Button className="mt-3" variant="primary" type="submit">
+          <Button
+            disabled={fetching}
+            className="mt-3"
+            variant="primary"
+            type="submit"
+          >
             Submit
           </Button>
         </Form>
