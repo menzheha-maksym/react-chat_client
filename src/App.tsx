@@ -1,10 +1,12 @@
-import React from 'react';
+import React from "react";
+import { Container } from "react-bootstrap";
+import Login from "./pages/Login";
 
 function App() {
   return (
-    <div>
-      Hello
-    </div>
+    <Container fluid>
+      <Login />
+    </Container>
   );
 }
 
