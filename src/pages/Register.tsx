@@ -3,9 +3,9 @@ import { Button, Form, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { gql, useMutation } from "urql";
 
-const LoginMutaion = gql`
-  mutation Login($input: UserInput!) {
-    login(input: $input) {
+const RegisterMutaion = gql`
+  mutation Register($input: UserInput!) {
+    register(input: $input) {
       user {
         id
         username
@@ -18,28 +18,28 @@ const LoginMutaion = gql`
   }
 `;
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const usernameRef = React.createRef<HTMLInputElement>();
   const passwordRef = React.createRef<HTMLInputElement>();
 
-  const [{ fetching }, login] = useMutation(LoginMutaion);
+  const [{ fetching }, register] = useMutation(RegisterMutaion);
 
   const [errors, setErrors] = useState<{ field: string; message: string }>();
 
   const navigate = useNavigate();
 
-  const onLoginSubmit = async (e: FormEvent) => {
+  const onRegisterSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const input = {
       username: usernameRef.current?.value,
       password: passwordRef.current?.value,
     };
-    const response = await login({ input });
+    const response = await register({ input });
 
-    if (response.data.login.errors) {
-      setErrors(response.data.login.errors[0]);
-    } else if (response.data.login.user) {
+    if (response.data.register.errors) {
+      setErrors(response.data.register.errors[0]);
+    } else if (response.data.register.user) {
       navigate("/d", { replace: true });
     }
   };
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
   return (
     <>
       <Container className="w-100">
-        <Form onSubmit={onLoginSubmit}>
+        <Form onSubmit={onRegisterSubmit}>
           <Form.Group>
             <Form.Label>Username</Form.Label>
             <Form.Control
@@ -72,16 +72,16 @@ const Login: React.FC = () => {
           </Form.Group>
           <Container className="mt-3 d-flex justify-content-between">
             <Button disabled={fetching} variant="primary" type="submit">
-              Login
+              Register
             </Button>
             <Button
               disabled={fetching}
               variant="primary"
               onClick={() => {
-                navigate("/register", { replace: true });
+                navigate("/Login", { replace: true });
               }}
             >
-              Register
+              Login
             </Button>
           </Container>
         </Form>
@@ -90,4 +90,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;
