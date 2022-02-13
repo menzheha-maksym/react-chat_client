@@ -18,10 +18,14 @@ const Dashboard: React.FC = () => {
 
   const navigate = useNavigate();
 
+  if (meFetching || logoutFetching) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
       <Container className="w-100 d-flex justify-content-between">
-        hello {!meFetching ? data.me.username : null}
+        hello {!meFetching && data.me ? data.me.username : null}
         <Button
           disabled={logoutFetching}
           variant="primary"
