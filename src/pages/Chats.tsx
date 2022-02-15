@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import { ChatCard } from "../components/ChatCard";
 import {
   useFindAllChatsByCurrentUserIdQuery,
   useMeQuery,
@@ -11,13 +12,11 @@ const Chats: React.FC = () => {
   const [{ data, fetching: meFetching }] = useMeQuery();
   const [{ data: chats, fetching: chatsFetching }] =
     useFindAllChatsByCurrentUserIdQuery();
-
   //const navigate = useNavigate();
 
   if (meFetching || chatsFetching) {
     return <div>loading...</div>;
   }
-
   return (
     <>
       <Container className="w-100 d-flex justify-content-between">
@@ -28,23 +27,16 @@ const Chats: React.FC = () => {
         <div>there is no chats</div>
       ) : (
         <Container>
-          {chats?.findAllChatsByCurrentUserId?.map((chat: any, i: any) => {
-            let ids = chat.usersIds;
-            for (let id of ids) {
-              if (id !== data?.me?.id) {
-                //return id;
-                return (
-                  <Card className="mb-2" key={i}>
-                    <Card.Body>
-                      <Card.Title>chat with user (username) {id}</Card.Title>
-                      <Card.Text>last message: </Card.Text>
-                    </Card.Body>
-                  </Card>
-                );
+          {chats?.findAllChatsByCurrentUserId?.map(
+            (chat: any, index: number) => {
+              for (let id of chat.usersIds) {
+                if (data?.me?.id.localeCompare(id)) {
+                  return <ChatCard key={index} userId={id} />;
+                }
               }
+              return null;
             }
-            return null;
-          })}
+          )}
         </Container>
       )}
     </>
