@@ -15,7 +15,7 @@ const Chats: React.FC = () => {
   //const navigate = useNavigate();
 
   if (meFetching || chatsFetching) {
-    return <div>loading...</div>;
+    return <Container>loading...</Container>;
   }
   return (
     <>
