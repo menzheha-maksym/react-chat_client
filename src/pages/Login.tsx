@@ -1,14 +1,13 @@
 import React, { FormEvent, useState } from "react";
 import { Button, Form, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "urql";
-import { LoginMutaion } from "../graphql/mutations/Login.mutation";
+import { useLoginMutation } from "../generated/graphql";
 
 const Login: React.FC = () => {
   const usernameRef = React.createRef<HTMLInputElement>();
   const passwordRef = React.createRef<HTMLInputElement>();
 
-  const [{ fetching }, login] = useMutation(LoginMutaion);
+  const [{ fetching }, login] = useLoginMutation();
 
   const [errors, setErrors] = useState<{ field: string; message: string }>();
 
@@ -18,14 +17,14 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     const input = {
-      username: usernameRef.current?.value,
-      password: passwordRef.current?.value,
+      username: usernameRef.current?.value ? usernameRef.current.value : "",
+      password: passwordRef.current?.value ? passwordRef.current.value : "",
     };
     const response = await login({ input });
 
-    if (response.data.login.errors) {
-      setErrors(response.data.login.errors[0]);
-    } else if (response.data.login.user) {
+    if (response.data?.login.errors) {
+      setErrors(response.data?.login.errors[0]);
+    } else if (response.data?.login.user) {
       navigate("/d", { replace: true });
     }
   };
