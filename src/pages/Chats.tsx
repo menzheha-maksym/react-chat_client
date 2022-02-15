@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Container } from "react-bootstrap";
+import React from "react";
+import { Card, Container } from "react-bootstrap";
 import { useQuery } from "urql";
 import { FindAllChatsByCurrentUserId } from "../graphql/queries/FindAllChatsByCurrentUserId";
 import { MeQuery } from "../graphql/queries/Me.query";
@@ -7,22 +7,15 @@ import { useIsAuth } from "../utils/useIsAuth";
 
 const Chats: React.FC = () => {
   useIsAuth();
-  const [{ data, fetching: meFetching }, findChats] = useQuery({
+  const [{ data, fetching: meFetching }] = useQuery({
     query: MeQuery,
   });
   const [{ data: chats, fetching: chatsFetching }] = useQuery({
     query: FindAllChatsByCurrentUserId,
+    requestPolicy: "network-only",
   });
 
   //const navigate = useNavigate();
-
-  useEffect(() => {
-    findChats();
-  }, [findChats]);
-
-  // useEffect(() => {
-  // fetch participant user id
-  // })
 
   if (meFetching || chatsFetching) {
     return <div>loading...</div>;
@@ -36,18 +29,25 @@ const Chats: React.FC = () => {
       {!chatsFetching && !chats.findAllChatsByCurrentUserId ? (
         <div>there is no chats</div>
       ) : (
-        <div>
-          <div>there is chats</div>
-          chat with user ID{" "}
+        <Container>
           {chats.findAllChatsByCurrentUserId.map((chat: any, i: any) => {
             let ids = chat.usersIds;
             for (let id of ids) {
               if (id !== data.me.id) {
-                return id;
+                //return id;
+                return (
+                  <Card className="mb-2" key={i}>
+                    <Card.Body>
+                      <Card.Title>chat with user (username) {id}</Card.Title>
+                      <Card.Text>last message: </Card.Text>
+                    </Card.Body>
+                  </Card>
+                );
               }
             }
+            return null;
           })}
-        </div>
+        </Container>
       )}
     </>
   );
