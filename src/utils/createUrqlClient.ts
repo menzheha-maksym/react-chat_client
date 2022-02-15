@@ -1,6 +1,11 @@
 import { cacheExchange } from "@urql/exchange-graphcache";
 import { createClient, dedupExchange, fetchExchange } from "urql";
-import { LoginMutation, MeDocument, MeQuery } from "../generated/graphql";
+import {
+  LoginMutation,
+  MeDocument,
+  MeQuery,
+  RegisterMutation,
+} from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
 export const createUrqlClient = createClient({
@@ -26,6 +31,22 @@ export const createUrqlClient = createClient({
                 } else {
                   return {
                     me: result.login.user,
+                  };
+                }
+              }
+            );
+          },
+          register: (_result, args, cache, info) => {
+            betterUpdateQuery<RegisterMutation, MeQuery>(
+              cache,
+              { query: MeDocument },
+              _result,
+              (result, query) => {
+                if (result.register.errors) {
+                  return query;
+                } else {
+                  return {
+                    me: result.register.user,
                   };
                 }
               }
