@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Provider } from "urql";
 import Chats from "./pages/Chats";
 import Dashboard from "./pages/Dashboard";
@@ -13,6 +13,7 @@ function App() {
     <Provider value={createUrqlClient}>
       <Container fluid>
         <Routes>
+          <Route path="/" element={<Navigate to="/d" />} />
           <Route path="/d" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
