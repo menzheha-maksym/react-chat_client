@@ -19,6 +19,16 @@ export const NavBar: React.FC = () => {
         <Button
           disabled={logoutFetching}
           variant="primary"
+          className="mx-5"
+          onClick={async () => {
+            navigate("/chats", { replace: true });
+          }}
+        >
+          Chats
+        </Button>
+        <Button
+          disabled={logoutFetching}
+          variant="primary"
           className=""
           onClick={async () => {
             await logout();
