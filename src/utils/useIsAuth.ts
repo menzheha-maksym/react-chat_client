@@ -4,11 +4,6 @@ import { useMeQuery } from "../generated/graphql";
 
 export const useIsAuth = () => {
   const [{ data, fetching }] = useMeQuery();
-  //remove later
-  /*useQuery({
-    query: MeQuery,
-    requestPolicy: "network-only",
-  });*/
   const navigate = useNavigate();
   useEffect(() => {
     if (!fetching && !data?.me) {
