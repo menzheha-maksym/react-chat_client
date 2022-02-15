@@ -1,22 +1,18 @@
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "urql";
-import { LogoutMutation } from "../graphql/mutations/Logout.mutation";
-import { MeQuery } from "../graphql/queries/Me.query";
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 
 export const NavBar: React.FC = () => {
-  const [{ data, fetching: meFetching }] = useQuery({
-    query: MeQuery,
-  });
+  const [{ data, fetching: meFetching }] = useMeQuery();
 
-  const [{ fetching: logoutFetching }, logout] = useMutation(LogoutMutation);
+  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
   const navigate = useNavigate();
 
   let body = null;
 
   if (meFetching) {
-  } else if (!data.me) {
+  } else if (!data?.me) {
   } else {
     body = (
       <>
