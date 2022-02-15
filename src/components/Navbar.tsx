@@ -22,7 +22,6 @@ export const NavBar: React.FC = () => {
           className=""
           onClick={async () => {
             await logout();
-            data.me = null; //////////////////////////////// todo: invalidate cache
             navigate("/login", { replace: true });
           }}
         >
