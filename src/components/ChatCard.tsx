@@ -3,10 +3,11 @@ import { useGetUserByIdQuery } from "../generated/graphql";
 
 interface ChatCardProps {
   userId: string; // string
+  chatId: string;
 }
 
-export const ChatCard: React.FC<ChatCardProps> = ({ userId }) => {
-  const [{ data }] = useGetUserByIdQuery({
+export const ChatCard: React.FC<ChatCardProps> = ({ userId, chatId }) => {
+  const [{ data, fetching }] = useGetUserByIdQuery({
     variables: {
       userId: userId.toString(), // why number
     },
@@ -21,7 +22,14 @@ export const ChatCard: React.FC<ChatCardProps> = ({ userId }) => {
           <Card.Title>chat with {data?.getUserById?.username}</Card.Title>
           <Card.Text>last message: </Card.Text>
         </div>
-        <Button>Go to chat</Button>
+        <Button
+          disabled={fetching}
+          onClick={() => {
+            console.log(chatId);
+          }}
+        >
+          Go to chat
+        </Button>
       </Card.Body>
     </Card>
   );

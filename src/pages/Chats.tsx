@@ -31,7 +31,9 @@ const Chats: React.FC = () => {
             (chat: any, index: number) => {
               for (let id of chat.usersIds) {
                 if (data?.me?.id.localeCompare(id)) {
-                  return <ChatCard key={index} userId={id} />;
+                  return (
+                    <ChatCard key={index} userId={id} chatId={chat.chatId} />
+                  );
                 }
               }
               return null;
