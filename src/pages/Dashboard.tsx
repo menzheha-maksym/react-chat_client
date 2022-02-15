@@ -24,19 +24,31 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Container className="w-100 d-flex justify-content-between">
+      <Container className="mt-2 w-100 d-flex justify-content-between">
         hello {!meFetching && data.me ? data.me.username : null}
-        <Button
-          disabled={logoutFetching}
-          variant="primary"
-          className=""
-          onClick={async () => {
-            await logout();
-            navigate("/login", { replace: true });
-          }}
-        >
-          Logout
-        </Button>
+        <div>
+          <Button
+            disabled={logoutFetching}
+            variant="danger"
+            className="mx-4"
+            onClick={async () => {
+              navigate("/chats", { replace: true });
+            }}
+          >
+            Chats
+          </Button>
+          <Button
+            disabled={logoutFetching}
+            variant="primary"
+            className=""
+            onClick={async () => {
+              await logout();
+              navigate("/login", { replace: true });
+            }}
+          >
+            Logout
+          </Button>
+        </div>
       </Container>
     </>
   );
