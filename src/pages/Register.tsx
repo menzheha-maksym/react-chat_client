@@ -1,14 +1,13 @@
 import React, { FormEvent, useState } from "react";
 import { Button, Form, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "urql";
-import { RegisterMutaion } from "../graphql/mutations/Register.mutation";
+import { useRegisterMutation } from "../generated/graphql";
 
 const Register: React.FC = () => {
   const usernameRef = React.createRef<HTMLInputElement>();
   const passwordRef = React.createRef<HTMLInputElement>();
 
-  const [{ fetching }, register] = useMutation(RegisterMutaion);
+  const [{ fetching }, register] = useRegisterMutation();
 
   const [errors, setErrors] = useState<{ field: string; message: string }>();
 
@@ -18,14 +17,14 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     const input = {
-      username: usernameRef.current?.value,
-      password: passwordRef.current?.value,
+      username: usernameRef.current?.value ? usernameRef.current.value : "",
+      password: passwordRef.current?.value ? passwordRef.current.value : "",
     };
-    const response = await register({ input });
+    const response = await register({ input: input });
 
-    if (response.data.register.errors) {
+    if (response.data?.register.errors) {
       setErrors(response.data.register.errors[0]);
-    } else if (response.data.register.user) {
+    } else if (response.data?.register.user) {
       navigate("/d", { replace: true });
     }
   };
