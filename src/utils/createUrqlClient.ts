@@ -18,6 +18,9 @@ export const createUrqlClient = createClient({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      keys: {
+        Chat: () => null,
+      },
       updates: {
         Mutation: {
           logout: (_result, args, cache, info) => {
