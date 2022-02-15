@@ -1,4 +1,4 @@
-query MessagesByChatId($id: Int!) {
+query MessagesByChatId($id: String!) {
   messagesByChatId(chatId: $id) {
     messageId
     text

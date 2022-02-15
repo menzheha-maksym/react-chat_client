@@ -121,10 +121,22 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', user?: { __typename?: 'UserType', id: string, username: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
+export type FindAllChatsByCurrentUserIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAllChatsByCurrentUserIdQuery = { __typename?: 'Query', findAllChatsByCurrentUserId?: Array<{ __typename?: 'Chat', chatId: number, usersIds: Array<number> }> | null };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'UserType', id: string, username: string } | null };
+
+export type MessagesByChatIdQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type MessagesByChatIdQuery = { __typename?: 'Query', messagesByChatId: Array<{ __typename?: 'Message', messageId: number, text: string, senderId: number, chatId: number }> };
 
 
 export const LoginDocument = gql`
@@ -172,6 +184,18 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const FindAllChatsByCurrentUserIdDocument = gql`
+    query FindAllChatsByCurrentUserId {
+  findAllChatsByCurrentUserId {
+    chatId
+    usersIds
+  }
+}
+    `;
+
+export function useFindAllChatsByCurrentUserIdQuery(options?: Omit<Urql.UseQueryArgs<FindAllChatsByCurrentUserIdQueryVariables>, 'query'>) {
+  return Urql.useQuery<FindAllChatsByCurrentUserIdQuery>({ query: FindAllChatsByCurrentUserIdDocument, ...options });
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -183,4 +207,18 @@ export const MeDocument = gql`
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const MessagesByChatIdDocument = gql`
+    query MessagesByChatId($id: String!) {
+  messagesByChatId(chatId: $id) {
+    messageId
+    text
+    senderId
+    chatId
+  }
+}
+    `;
+
+export function useMessagesByChatIdQuery(options: Omit<Urql.UseQueryArgs<MessagesByChatIdQueryVariables>, 'query'>) {
+  return Urql.useQuery<MessagesByChatIdQuery>({ query: MessagesByChatIdDocument, ...options });
 };
