@@ -1,8 +1,6 @@
 import React from "react";
-import { Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "urql";
-import { LogoutMutation } from "../graphql/mutations/Logout.mutation";
+import { Container } from "react-bootstrap";
+import { useQuery } from "urql";
 import { MeQuery } from "../graphql/queries/Me.query";
 import { useIsAuth } from "../utils/useIsAuth";
 
@@ -14,11 +12,7 @@ const Dashboard: React.FC = () => {
     query: MeQuery,
   });
 
-  const [{ fetching: logoutFetching }, logout] = useMutation(LogoutMutation);
-
-  const navigate = useNavigate();
-
-  if (meFetching || logoutFetching) {
+  if (meFetching) {
     return <div>loading...</div>;
   }
 
@@ -26,17 +20,6 @@ const Dashboard: React.FC = () => {
     <>
       <Container className="w-100 d-flex justify-content-between">
         hello {!meFetching && data.me ? data.me.username : null}
-        <Button
-          disabled={logoutFetching}
-          variant="primary"
-          className=""
-          onClick={async () => {
-            await logout();
-            navigate("/login", { replace: true });
-          }}
-        >
-          Logout
-        </Button>
       </Container>
     </>
   );
