@@ -1,0 +1,6 @@
+query FindAllChatsByCurrentUserId {
+  findAllChatsByCurrentUserId {
+    chatId
+    usersIds
+  }
+}

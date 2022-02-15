@@ -1,0 +1,8 @@
+query MessagesByChatId($id: Int!) {
+  messagesByChatId(chatId: $id) {
+    messageId
+    text
+    senderId
+    chatId
+  }
+}
