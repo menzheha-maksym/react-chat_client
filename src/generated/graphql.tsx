@@ -73,11 +73,17 @@ export type Query = {
   __typename?: 'Query';
   chats: Array<Chat>;
   findAllChatsByCurrentUserId?: Maybe<Array<Chat>>;
+  getUserById?: Maybe<UserType>;
   hello: Scalars['String'];
   me?: Maybe<UserType>;
   messages: Array<Message>;
   messagesByChatId: Array<Message>;
   users: Array<UserType>;
+};
+
+
+export type QueryGetUserByIdArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -125,6 +131,13 @@ export type FindAllChatsByCurrentUserIdQueryVariables = Exact<{ [key: string]: n
 
 
 export type FindAllChatsByCurrentUserIdQuery = { __typename?: 'Query', findAllChatsByCurrentUserId?: Array<{ __typename?: 'Chat', chatId: number, usersIds: Array<number> }> | null };
+
+export type GetUserByIdQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type GetUserByIdQuery = { __typename?: 'Query', getUserById?: { __typename?: 'UserType', id: string, username: string } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -195,6 +208,18 @@ export const FindAllChatsByCurrentUserIdDocument = gql`
 
 export function useFindAllChatsByCurrentUserIdQuery(options?: Omit<Urql.UseQueryArgs<FindAllChatsByCurrentUserIdQueryVariables>, 'query'>) {
   return Urql.useQuery<FindAllChatsByCurrentUserIdQuery>({ query: FindAllChatsByCurrentUserIdDocument, ...options });
+};
+export const GetUserByIdDocument = gql`
+    query GetUserById($userId: String!) {
+  getUserById(userId: $userId) {
+    id
+    username
+  }
+}
+    `;
+
+export function useGetUserByIdQuery(options: Omit<Urql.UseQueryArgs<GetUserByIdQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetUserByIdQuery>({ query: GetUserByIdDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
