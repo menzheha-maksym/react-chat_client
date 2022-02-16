@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useGetUserByUsernameQuery } from "../generated/graphql";
 
 export const UserSearch: React.FC = () => {
@@ -7,6 +7,7 @@ export const UserSearch: React.FC = () => {
 
   const [username, setUsername] = useState<string>();
   const [isSearch, setIsSearch] = useState(false);
+  const [error, setError] = useState<string>();
 
   const [{ data, fetching }] = useGetUserByUsernameQuery({
     pause: !isSearch,
@@ -16,6 +17,11 @@ export const UserSearch: React.FC = () => {
   });
 
   useEffect(() => {
+    if (data?.getUserByUsername === null) {
+      setError("user does not exist");
+    } else {
+      setError("");
+    }
     console.log(data);
   }, [data]);
 
@@ -25,6 +31,8 @@ export const UserSearch: React.FC = () => {
     if (usernameRef.current!.value.length > 3) {
       setUsername(usernameRef.current?.value);
       setIsSearch(true);
+    } else {
+      setError("");
     }
   };
 
@@ -42,6 +50,11 @@ export const UserSearch: React.FC = () => {
           Search
         </Button>
       </Form>
+      {error ? (
+        <Alert className="mt-3" variant="danger">
+          {error}
+        </Alert>
+      ) : null}
     </Container>
   );
 };
