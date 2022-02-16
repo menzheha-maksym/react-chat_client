@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import { ChatCard } from "../components/ChatCard";
 import { UserSearch } from "../components/UserSearch";
@@ -14,7 +14,12 @@ const Chats: React.FC = () => {
   const [{ data, fetching: meFetching }] = useMeQuery();
   const [{ data: chats, fetching: chatsFetching }] =
     useFindAllChatsByCurrentUserIdQuery();
-  //const navigate = useNavigate();
+
+  const [foundUsername, setFoundUsername] = useState<string>();
+
+  const updateFoundUsername = (username: string): void => {
+    setFoundUsername(username);
+  };
 
   if (meFetching || chatsFetching) {
     return <Container>loading...</Container>;
@@ -25,7 +30,7 @@ const Chats: React.FC = () => {
         hello from chats page{" "}
         {!meFetching && data?.me ? data.me.username : null}
       </Container>
-      <UserSearch />
+      <UserSearch foundUsername={updateFoundUsername} />
       {!chatsFetching && !chats?.findAllChatsByCurrentUserId ? (
         <div>there is no chats</div>
       ) : (

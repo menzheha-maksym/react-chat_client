@@ -2,7 +2,11 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useGetUserByUsernameQuery } from "../generated/graphql";
 
-export const UserSearch: React.FC = () => {
+interface UserSearchProps {
+  foundUsername: (username: string) => void;
+}
+
+export const UserSearch: React.FC<UserSearchProps> = ({ foundUsername }) => {
   const usernameRef = React.createRef<HTMLInputElement>();
 
   const [username, setUsername] = useState<string>();
@@ -21,8 +25,8 @@ export const UserSearch: React.FC = () => {
       setError("user does not exist");
     } else {
       setError("");
+      foundUsername(username!);
     }
-    console.log(data);
   }, [data]);
 
   const onSubmit = (event: FormEvent) => {
