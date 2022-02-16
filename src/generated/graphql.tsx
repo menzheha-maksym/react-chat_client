@@ -73,6 +73,7 @@ export type Query = {
   __typename?: 'Query';
   chats: Array<Chat>;
   findAllChatsByCurrentUserId?: Maybe<Array<Chat>>;
+  findChatWithTwoUsersByUserIds?: Maybe<Chat>;
   getUserById?: Maybe<UserType>;
   getUserByUsername?: Maybe<UserType>;
   hello: Scalars['String'];
@@ -80,6 +81,12 @@ export type Query = {
   messages: Array<Message>;
   messagesByChatId: Array<Message>;
   users: Array<UserType>;
+};
+
+
+export type QueryFindChatWithTwoUsersByUserIdsArgs = {
+  userId1: Scalars['String'];
+  userId2: Scalars['String'];
 };
 
 
@@ -137,6 +144,14 @@ export type FindAllChatsByCurrentUserIdQueryVariables = Exact<{ [key: string]: n
 
 
 export type FindAllChatsByCurrentUserIdQuery = { __typename?: 'Query', findAllChatsByCurrentUserId?: Array<{ __typename?: 'Chat', chatId: number, usersIds: Array<number> }> | null };
+
+export type FindChatWithTwoUsersByUserIdsQueryVariables = Exact<{
+  userId1: Scalars['String'];
+  userId2: Scalars['String'];
+}>;
+
+
+export type FindChatWithTwoUsersByUserIdsQuery = { __typename?: 'Query', findChatWithTwoUsersByUserIds?: { __typename?: 'Chat', chatId: number, updatedAt: string } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -221,6 +236,18 @@ export const FindAllChatsByCurrentUserIdDocument = gql`
 
 export function useFindAllChatsByCurrentUserIdQuery(options?: Omit<Urql.UseQueryArgs<FindAllChatsByCurrentUserIdQueryVariables>, 'query'>) {
   return Urql.useQuery<FindAllChatsByCurrentUserIdQuery>({ query: FindAllChatsByCurrentUserIdDocument, ...options });
+};
+export const FindChatWithTwoUsersByUserIdsDocument = gql`
+    query FindChatWithTwoUsersByUserIds($userId1: String!, $userId2: String!) {
+  findChatWithTwoUsersByUserIds(userId1: $userId1, userId2: $userId2) {
+    chatId
+    updatedAt
+  }
+}
+    `;
+
+export function useFindChatWithTwoUsersByUserIdsQuery(options: Omit<Urql.UseQueryArgs<FindChatWithTwoUsersByUserIdsQueryVariables>, 'query'>) {
+  return Urql.useQuery<FindChatWithTwoUsersByUserIdsQuery>({ query: FindChatWithTwoUsersByUserIdsDocument, ...options });
 };
 export const GetUserByIdDocument = gql`
     query GetUserById($userId: String!) {

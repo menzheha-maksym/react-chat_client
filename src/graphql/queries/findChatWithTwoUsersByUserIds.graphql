@@ -1,0 +1,6 @@
+query FindChatWithTwoUsersByUserIds($userId1: String!, $userId2: String!) {
+  findChatWithTwoUsersByUserIds(userId1: $userId1, userId2: $userId2) {
+    chatId
+    updatedAt
+  }
+}
