@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Card, Container } from "react-bootstrap";
 import { ChatCard } from "../components/ChatCard";
 import { UserSearch } from "../components/UserSearch";
 import {
@@ -62,6 +62,20 @@ const Chats: React.FC = () => {
             userId={foundId!}
             chatId={foundChat.findChatWithTwoUsersByUserIds.chatId.toString()}
           />
+        </Container>
+      ) : !foundChatFetching &&
+        !foundChat?.findChatWithTwoUsersByUserIds &&
+        foundId ? (
+        <Container>
+          <Card>
+            <Card.Body className="d-flex justify-content-between">
+              <div>
+                <Card.Title>username</Card.Title>
+                <Card.Text>you do not have chat with this user</Card.Text>
+              </div>
+              <Button>Start new Chat</Button>
+            </Card.Body>
+          </Card>
         </Container>
       ) : !chatsFetching && !chats?.findAllChatsByCurrentUserId ? (
         <div>there is no chats</div>
