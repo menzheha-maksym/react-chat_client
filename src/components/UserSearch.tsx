@@ -23,6 +23,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({ foundId }) => {
   useEffect(() => {
     if (data?.getUserByUsername === null) {
       setError("user does not exist");
+      foundId("");
     } else {
       setError("");
       foundId(data?.getUserByUsername?.id!);

@@ -19,24 +19,24 @@ const Chats: React.FC = () => {
   const [{ data, fetching: meFetching }] = useMeQuery();
   const [{ data: chats, fetching: chatsFetching }] =
     useFindAllChatsByCurrentUserIdQuery();
-  const [{ data: foundChat }] = useFindChatWithTwoUsersByUserIdsQuery({
-    pause: !isFound,
-    variables: {
-      userId1: meId!,
-      userId2: foundId!,
-    },
-  });
+  const [{ data: foundChat, fetching: foundChatFetching }] =
+    useFindChatWithTwoUsersByUserIdsQuery({
+      pause: !isFound,
+      variables: {
+        userId1: meId!,
+        userId2: foundId!,
+      },
+    });
 
-  const updateFoundId = (username: string): void => {
-    setFoundId(username);
+  const updateFoundId = (id: string): void => {
+    setFoundId(id);
   };
 
   useEffect(() => {
     if (foundId) {
       setIsFound(true);
-      console.log(foundChat);
     }
-  }, [foundId, foundChat]);
+  }, [foundId]);
 
   useEffect(() => {
     if (data?.me?.id) {
@@ -55,7 +55,15 @@ const Chats: React.FC = () => {
         {!meFetching && data?.me ? data.me.username : null}
       </Container>
       <UserSearch foundId={updateFoundId} />
-      {!chatsFetching && !chats?.findAllChatsByCurrentUserId ? (
+      {!foundChatFetching &&
+      foundChat?.findChatWithTwoUsersByUserIds?.chatId ? (
+        <Container>
+          <ChatCard
+            userId={foundId!}
+            chatId={foundChat.findChatWithTwoUsersByUserIds.chatId.toString()}
+          />
+        </Container>
+      ) : !chatsFetching && !chats?.findAllChatsByCurrentUserId ? (
         <div>there is no chats</div>
       ) : (
         <Container>
