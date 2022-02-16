@@ -4,9 +4,13 @@ import { useGetUserByUsernameQuery } from "../generated/graphql";
 
 interface UserSearchProps {
   foundId: (id: string) => void;
+  foundUsername: (username: string) => void;
 }
 
-export const UserSearch: React.FC<UserSearchProps> = ({ foundId }) => {
+export const UserSearch: React.FC<UserSearchProps> = ({
+  foundId,
+  foundUsername,
+}) => {
   const usernameRef = React.createRef<HTMLInputElement>();
 
   const [username, setUsername] = useState<string>();
@@ -27,8 +31,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({ foundId }) => {
     } else {
       setError("");
       foundId(data?.getUserByUsername?.id!);
+      foundUsername(data?.getUserByUsername?.username!);
     }
-  }, [data, foundId]);
+  }, [data, foundId, foundUsername]);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();

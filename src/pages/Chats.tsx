@@ -13,6 +13,7 @@ const Chats: React.FC = () => {
   useIsAuth();
 
   const [foundId, setFoundId] = useState<string>();
+  const [foundUsername, setFoundUsername] = useState<string>();
   const [isFound, setIsFound] = useState(false);
   const [meId, setMeId] = useState<string>();
 
@@ -30,6 +31,9 @@ const Chats: React.FC = () => {
 
   const updateFoundId = (id: string): void => {
     setFoundId(id);
+  };
+  const updateFoundUsername = (username: string): void => {
+    setFoundUsername(username);
   };
 
   useEffect(() => {
@@ -54,7 +58,7 @@ const Chats: React.FC = () => {
         hello from chats page{" "}
         {!meFetching && data?.me ? data.me.username : null}
       </Container>
-      <UserSearch foundId={updateFoundId} />
+      <UserSearch foundId={updateFoundId} foundUsername={updateFoundUsername} />
       {!foundChatFetching &&
       foundChat?.findChatWithTwoUsersByUserIds?.chatId ? (
         <Container>
@@ -70,7 +74,7 @@ const Chats: React.FC = () => {
           <Card>
             <Card.Body className="d-flex justify-content-between">
               <div>
-                <Card.Title>username</Card.Title>
+                <Card.Title>{foundUsername}</Card.Title>
                 <Card.Text>you do not have chat with this user</Card.Text>
               </div>
               <Button>Start new Chat</Button>

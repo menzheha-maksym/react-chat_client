@@ -19,7 +19,7 @@ export const ChatCard: React.FC<ChatCardProps> = ({ userId, chatId }) => {
     <Card className="mb-2">
       <Card.Body className="d-flex justify-content-between">
         <div>
-          <Card.Title>chat with {data?.getUserById?.username}</Card.Title>
+          <Card.Title>{data?.getUserById?.username}</Card.Title>
           <Card.Text>last message: </Card.Text>
         </div>
         <Button
