@@ -28,7 +28,8 @@ export const UserSearch: React.FC<UserSearchProps> = ({ foundUser }) => {
       setError("");
       foundUser(data.getUserByUsername);
     }
-  }, [data, foundUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();

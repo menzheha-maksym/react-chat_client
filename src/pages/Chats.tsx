@@ -32,6 +32,7 @@ const Chats: React.FC = () => {
 
   const updateFoundUser = (user: UserType | null): void => {
     setFoundUser(user);
+    setMeId(data?.me?.id);
   };
 
   useEffect(() => {
@@ -40,12 +41,6 @@ const Chats: React.FC = () => {
       setFoundUserId(foundUser.id);
     }
   }, [foundUser]);
-
-  useEffect(() => {
-    if (data?.me?.id) {
-      setMeId(data.me.id);
-    }
-  }, [data?.me?.id]);
 
   if (meFetching || chatsFetching) {
     return <Container>loading...</Container>;
@@ -59,7 +54,8 @@ const Chats: React.FC = () => {
       </Container>
       <UserSearch foundUser={updateFoundUser} />
       {!foundChatFetching &&
-      foundChat?.findChatWithTwoUsersByUserIds?.chatId ? (
+      foundChat?.findChatWithTwoUsersByUserIds?.chatId &&
+      foundUser ? (
         <Container>
           <ChatCard
             userId={foundUser!.id}
