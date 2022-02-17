@@ -1,16 +1,12 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import { useGetUserByUsernameQuery } from "../generated/graphql";
+import { useGetUserByUsernameQuery, UserType } from "../generated/graphql";
 
 interface UserSearchProps {
-  foundId: (id: string) => void;
-  foundUsername: (username: string) => void;
+  foundUser: (user: UserType | null) => void;
 }
 
-export const UserSearch: React.FC<UserSearchProps> = ({
-  foundId,
-  foundUsername,
-}) => {
+export const UserSearch: React.FC<UserSearchProps> = ({ foundUser }) => {
   const usernameRef = React.createRef<HTMLInputElement>();
 
   const [username, setUsername] = useState<string>();
@@ -27,13 +23,12 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   useEffect(() => {
     if (data?.getUserByUsername === null) {
       setError("user does not exist");
-      foundId("");
-    } else {
+      foundUser(null);
+    } else if (data?.getUserByUsername) {
       setError("");
-      foundId(data?.getUserByUsername?.id!);
-      foundUsername(data?.getUserByUsername?.username!);
+      foundUser(data.getUserByUsername);
     }
-  }, [data, foundId, foundUsername]);
+  }, [data, foundUser]);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();

@@ -6,14 +6,15 @@ import {
   useFindAllChatsByCurrentUserIdQuery,
   useFindChatWithTwoUsersByUserIdsQuery,
   useMeQuery,
+  UserType,
 } from "../generated/graphql";
 import { useIsAuth } from "../utils/useIsAuth";
 
 const Chats: React.FC = () => {
   useIsAuth();
 
-  const [foundId, setFoundId] = useState<string>();
-  const [foundUsername, setFoundUsername] = useState<string>();
+  const [foundUser, setFoundUser] = useState<UserType | null>(null);
+  const [foundUserId, setFoundUserId] = useState<string>();
   const [isFound, setIsFound] = useState(false);
   const [meId, setMeId] = useState<string>();
 
@@ -25,22 +26,20 @@ const Chats: React.FC = () => {
       pause: !isFound,
       variables: {
         userId1: meId!,
-        userId2: foundId!,
+        userId2: foundUserId!,
       },
     });
 
-  const updateFoundId = (id: string): void => {
-    setFoundId(id);
-  };
-  const updateFoundUsername = (username: string): void => {
-    setFoundUsername(username);
+  const updateFoundUser = (user: UserType | null): void => {
+    setFoundUser(user);
   };
 
   useEffect(() => {
-    if (foundId) {
+    if (foundUser) {
       setIsFound(true);
+      setFoundUserId(foundUser.id);
     }
-  }, [foundId]);
+  }, [foundUser]);
 
   useEffect(() => {
     if (data?.me?.id) {
@@ -58,23 +57,23 @@ const Chats: React.FC = () => {
         hello from chats page{" "}
         {!meFetching && data?.me ? data.me.username : null}
       </Container>
-      <UserSearch foundId={updateFoundId} foundUsername={updateFoundUsername} />
+      <UserSearch foundUser={updateFoundUser} />
       {!foundChatFetching &&
       foundChat?.findChatWithTwoUsersByUserIds?.chatId ? (
         <Container>
           <ChatCard
-            userId={foundId!}
+            userId={foundUser!.id}
             chatId={foundChat.findChatWithTwoUsersByUserIds.chatId.toString()}
           />
         </Container>
       ) : !foundChatFetching &&
         !foundChat?.findChatWithTwoUsersByUserIds &&
-        foundId ? (
+        foundUser ? (
         <Container>
           <Card>
             <Card.Body className="d-flex justify-content-between">
               <div>
-                <Card.Title>{foundUsername}</Card.Title>
+                <Card.Title>{foundUser.username}</Card.Title>
                 <Card.Text>you do not have chat with this user</Card.Text>
               </div>
               <Button>Start new Chat</Button>
