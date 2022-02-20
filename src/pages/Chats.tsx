@@ -21,18 +21,17 @@ const Chats: React.FC = () => {
   const [{ data, fetching: meFetching }] = useMeQuery();
   const [{ data: chats, fetching: chatsFetching }] =
     useFindAllChatsByCurrentUserIdQuery();
-  const [{ data: foundChat, fetching: foundChatFetching }] =
-    useFindChatWithTwoUsersByUserIdsQuery({
-      pause: !isFound,
-      variables: {
-        userId1: meId!,
-        userId2: foundUserId!,
-      },
-    });
+  const [{ data: foundChat }] = useFindChatWithTwoUsersByUserIdsQuery({
+    pause: !isFound,
+    variables: {
+      userId1: meId!,
+      userId2: foundUserId!,
+    },
+  });
 
   const updateFoundUser = (user: UserType | null): void => {
     setFoundUser(user);
-    setMeId(data?.me?.id);
+    setMeId(data!.me!.id);
   };
 
   useEffect(() => {
@@ -53,18 +52,15 @@ const Chats: React.FC = () => {
         {!meFetching && data?.me ? data.me.username : null}
       </Container>
       <UserSearch foundUser={updateFoundUser} />
-      {!foundChatFetching &&
-      foundChat?.findChatWithTwoUsersByUserIds?.chatId &&
-      foundUser ? (
+
+      {foundChat?.findChatWithTwoUsersByUserIds?.chatId && foundUser ? (
         <Container>
           <ChatCard
             userId={foundUser!.id}
             chatId={foundChat.findChatWithTwoUsersByUserIds.chatId.toString()}
           />
         </Container>
-      ) : !foundChatFetching &&
-        !foundChat?.findChatWithTwoUsersByUserIds &&
-        foundUser ? (
+      ) : !foundChat?.findChatWithTwoUsersByUserIds && foundUser ? (
         <Container>
           <Card>
             <Card.Body className="d-flex justify-content-between">
@@ -76,7 +72,7 @@ const Chats: React.FC = () => {
             </Card.Body>
           </Card>
         </Container>
-      ) : !chatsFetching && !chats?.findAllChatsByCurrentUserId ? (
+      ) : !chats?.findAllChatsByCurrentUserId ? (
         <div>there is no chats</div>
       ) : (
         <Container>
